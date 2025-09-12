@@ -84,9 +84,9 @@ Siga os passos abaixo para colocar o ambiente no ar:
     * Este comando irá baixar a imagem do sistema operacional (se for a primeira vez), criar a máquina virtual e executar o script `bootstrap.sh`. O processo pode levar alguns minutos.
 
 5.  **Acesse a aplicação:**
-    Após a conclusão do `vagrant up`, o servidor Flask estará rodando dentro da VM. Para que você possa acessá-lo do seu navegador, o `Vagrantfile` deve ser configurado para encaminhar uma porta (por exemplo, a porta 5000 da VM para a 5000 da sua máquina).
+    Após a conclusão do `vagrant up`, o servidor Flask estará rodando dentro da VM. Para que você possa acessá-lo do seu navegador, o `Vagrantfile` deve ser configurado para encaminhar uma porta (por exemplo, a porta 8080 da VM para a 8080 da sua máquina).
 
-    Abra seu navegador e acesse: `http://localhost:5000`
+    Abra seu navegador e acesse: `http://localhost:8080`
 
 6.  **Verificando os logs:**
     Caso a aplicação não pareça estar funcionando, você pode acessar a VM via SSH e verificar o arquivo de log:
