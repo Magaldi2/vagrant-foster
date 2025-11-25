@@ -1,48 +1,39 @@
-name: CI com Docker Containers
+name: CI Pipeline
 
 on:
   push:
-    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "main", "master" ]
 
 jobs:
-  integration-test:
+  test:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: admin
+        ports:
+          - 5432:5432
 
     steps:
-    - name: Checkout do código
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-    - name: Configurar Python (para rodar os testes)
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.9"
+      - name: Build Docker image
+        run: docker build -t foster_app .
 
-    - name: Instalar dependências de TESTE
-      run: |
-        python -m pip install --upgrade pip
-        # Instalamos requests (para chamar o container) e pytest
-        pip install pytest requests numpy
+      - name: Run docker-compose
+        run: docker-compose up -d
 
-    - name: Gerar Modelo Dummy
-      # Gera o arquivo .pkl para que o container não quebre ao iniciar
-      run: python create_dummy_model.py
-
-    - name: Subir Containers com Docker Compose
-      run: |
-        # Sobe em modo detached (-d) e força o build
-        docker compose up -d --build
         
-        # Lista os containers para debug
-        docker ps -a
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # ADICIONAMOS matplotlib e opencv-python-headless AQUI:
+          pip install pytest requests numpy matplotlib opencv-python-headless
 
-    - name: Executar Testes
-      run: |
-        # Roda os testes. O pytest vai executar o arquivo de integração
-        # que tenta conectar em localhost:5000
-        pytest -v tests/
-
-    - name: Logs do Container (em caso de falha)
-      if: failure()
-      run: docker compose logs flask-app
+      - name: Run tests
+        run: pytest -v
