@@ -1,0 +1,12 @@
+.git
+.gitignore
+.vagrant
+Vagrantfile
+bootstrap.sh
+__pycache__
+*.pyc
+*.pyo
+*.log
+.env
+venv/
+*.md

@@ -1,0 +1,48 @@
+name: CI com Docker Containers
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Configurar Python (para rodar os testes)
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.9"
+
+    - name: Instalar dependências de TESTE
+      run: |
+        python -m pip install --upgrade pip
+        # Instalamos requests (para chamar o container) e pytest
+        pip install pytest requests numpy
+
+    - name: Gerar Modelo Dummy
+      # Gera o arquivo .pkl para que o container não quebre ao iniciar
+      run: python create_dummy_model.py
+
+    - name: Subir Containers com Docker Compose
+      run: |
+        # Sobe em modo detached (-d) e força o build
+        docker compose up -d --build
+        
+        # Lista os containers para debug
+        docker ps -a
+
+    - name: Executar Testes
+      run: |
+        # Roda os testes. O pytest vai executar o arquivo de integração
+        # que tenta conectar em localhost:5000
+        pytest -v tests/
+
+    - name: Logs do Container (em caso de falha)
+      if: failure()
+      run: docker compose logs flask-app

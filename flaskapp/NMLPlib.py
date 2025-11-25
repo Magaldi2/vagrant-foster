@@ -86,10 +86,21 @@ def saveModelo(modelo):
     with open(filename, 'wb') as file:
         pickle.dump(modelo, file)
 
+# --- SUBSTITUIR A FUNÇÃO loadModelo ORIGINAL POR ESTE BLOCO ---
+
+class CustomUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        # Se o pickle procurar pela classe 'NeuralNetwork', forçamos
+        # o uso da classe definida neste arquivo, ignorando o módulo original (__main__)
+        if name == 'NeuralNetwork':
+            return NeuralNetwork
+        return super().find_class(module, name)
+
 def loadModelo(nome):
     with open(nome, 'rb') as file:
-        modelo = pickle.load(file)
-        return modelo
+        return CustomUnpickler(file).load()
+
+# ---------------------------------------------------------------
 
 
 #  Classe da Rede Neural
@@ -425,6 +436,5 @@ def treinarRede(redeNeural, learning_rate, batch_size, epocas, test_images, test
           modelo_temp = redeNeural.copy()
 
     return lista_custo, lista_precisao, modelo_temp
-
 
 

@@ -12,7 +12,10 @@ from NMLPlib import *
 app = Flask(__name__)
 
 # Carrega o modelo uma vez na inicialização
-modelo = loadModelo('../NeuralNetwork.pkl')
+# Constrói o caminho para o modelo de forma relativa ao arquivo app.py
+APP_DIR = Path(__file__).resolve().parent
+MODEL_PATH = APP_DIR / 'NeuralNetwork.pkl'
+modelo = loadModelo(str(MODEL_PATH))
 
 @app.route('/')
 def index():
