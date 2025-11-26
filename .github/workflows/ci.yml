@@ -24,8 +24,8 @@ jobs:
       - name: Build Docker image
         run: docker build -t foster_app .
 
-      - name: Run docker-compose
-        run: docker-compose up -d
+      - name: Run docker compose
+        run: docker compose up -d
 
         
       - name: Install dependencies
