@@ -4,7 +4,7 @@ import json
 import time
 
 # URL do container Flask (mapeado no docker-compose ports: 5000:5000)
-BASE_URL = "http://localhost:5000"
+BASE_URL = "http://localhost:8080"
 
 # Fixture para garantir que o container está respondendo antes de testar
 @pytest.fixture(scope="module", autouse=True)
