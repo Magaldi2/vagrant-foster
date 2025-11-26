@@ -9,7 +9,7 @@ BASE_URL = "http://localhost:5000"
 # Fixture para garantir que o container está respondendo antes de testar
 @pytest.fixture(scope="module", autouse=True)
 def wait_for_server():
-    retries = 10
+    retries = 35
     for i in range(retries):
         try:
             response = requests.get(BASE_URL)
