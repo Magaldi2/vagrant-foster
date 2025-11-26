@@ -18,6 +18,11 @@ services:
       - FLASK_DEBUG=1
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   nginx:
