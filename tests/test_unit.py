@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../flaskapp'))
 from NMLPlib import sigmoid, sigmoid_derivative, NeuralNetwork
 
 # --- TESTES MATEMÁTICOS (FUNÇÕES AUXILIARES) ---
-
+#--
 def test_sigmoid_basic():
     # 1. Testa se sigmoid de 0 é 0.5
     assert sigmoid(0) == 0.5
